@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>localstorage_practice</title>
+</head>
+
+<body>
+
+    <input id="input" type="text" placeholder="enter your thought...">
+    <button class="add">add thought</button>
+    <button class="get">Get data</button>
+    <button class="clear">clear data</button>
+    <div class="display"></div>
+
+    <script>
+        let input = document.querySelector("#input");
+        let addbtn = document.querySelector(".add");
+        let getbtn = document.querySelector(".get");
+        let clearbtn = document.querySelector(".clear");
+        let display = document.querySelector(".display");
+        let data = JSON.parse(localStorage.getItem("task")) || [];
+        let gindex = -1;
+
+        input.focus();
+
+        function editTask(index) {
+            gindex = index;
+            input.value = data[gindex];
+            input.focus();
+
+        }
+        function deleteTask(index) {
+            gindex = index;
+            data.splice(gindex, 1);
+            localStorage.setItem("task", JSON.stringify(data));
+            showData();
+            gIndex = -1;
+
+        }
+
+        function showData() {
+            console.log(data);
+            display.innerHTML = "";
+            data.forEach((value, index) => {
+                let p = document.createElement("p");
+                let editbtn = document.createElement("button");
+                let delbtn = document.createElement("button");
+                editbtn.innerHTML = "Edit";
+                delbtn.innerHTML = "Delete";
+                editbtn.addEventListener("click", () => {
+                    editTask(index);
+
+                })
+                delbtn.addEventListener("click", () => {
+                    deleteTask(index)
+                })
+                p.innerHTML = value;
+                display.append(p, editbtn, delbtn);
+
+
+            })
+
+
+            input.focus();
+            // console.log(value);
+
+
+        }
+
+        addbtn.addEventListener("click", () => {
+            let value = input.value.trim();
+            console.log(value);
+
+
+
+            // for localstorage we have to convert data in string.
+
+            if (gindex == -1) {
+                data.push(value);
+                localStorage.setItem("task", JSON.stringify(data));
+
+            }
+            else {
+                data[gindex] = value;
+                localStorage.setItem("task", JSON.stringify(data));
+
+            }
+
+            input.focus();
+            input.value = "";
+            showData();
+
+        })
+
+        // getbtn is to keep data in cosole after click clear button.
+        getbtn.addEventListener("click", () => {
+            // to get data from locatstorage in cosole we have to convert data in object.
+            let storeData = JSON.parse(localStorage.getItem("task"));
+            console.log(storeData);
+
+        })
+
+        clearbtn.addEventListener("click", () => {
+            // using removeitem only from "data" key will remove from localstorage.
+            localStorage.removeItem("task");
+
+            // using clearitem  ALL data will remove from localstorage.// 
+            // localStorage.clear();
+
+        })
+
+        showData();
+
+
+    </script>
+
+</body>
+
+</html>
