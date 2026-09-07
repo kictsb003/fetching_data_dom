@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fetch practice</title>
+
+<style>
+    .display{
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 10px;
+        }
+        .card{
+            border: 15px solid blue;
+            border-radius: 20px;
+            padding: 10px;
+        }
+</style>
+
+</head>
+<body>
+    <div class="display">
+
+    </div>
+        <button>fetch</button>
+
+
+    <script>
+
+        function fetchData (){
+            async function getData(url){
+                let info = await fetch(url);
+                let data = await info.json();
+                // console.log(data);
+                Array.from(data).forEach((value)=>{
+                    let card = document.createElement("div");
+                    card.classList.add("card");
+
+                    let uId = document.createElement("h1");
+                    uId.innerHTML = "UserId : " + value.userId;
+
+                    let Id = document.createElement("h2");
+                    uId.innerHTML = "Id : " + value.Id;
+
+                    let t = document.createElement("h2");
+                    uId.innerHTML = "Title : " + value.title;
+
+                    let b = document.createElement("p");
+                    uId.innerHTML = "body : " + value.body;
+
+                    card.append (uId,Id,t,b);                 
+                    let display = document.querySelector(".display");
+                    display.append(card);
+                })
+                
+            }
+
+            getData("https://jsonplaceholder.typicode.com/posts");
+        }
+
+        let btn = document.querySelector("button");
+        btn.addEventListener("click", ()=>{
+            fetchData();
+        })
+    </script>
+</body>
+</html>
